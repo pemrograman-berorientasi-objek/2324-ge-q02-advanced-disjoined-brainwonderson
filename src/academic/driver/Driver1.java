@@ -1,20 +1,26 @@
 package academic.driver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 /**
  * @author 12S22016 Desri Dabukke
+ * 12S22035- Brain Wonderson
  */
 import academic.model.Course;
 import academic.model.Enrollment;
 import academic.model.Student;
+import academic.model.StudentPerformance;
 import academic.model.Lecturer;
 import academic.model.CourseOpen;
 
 public class Driver1 {
 
+    private static Course[] courses;
     public static void main(String[] args) {
          // Method untuk menjalankan program utama
+         courses = new Course[100];
         Scanner scan = new Scanner(System.in);
         ArrayList<Student> students = new ArrayList<>();
         ArrayList<Course> courses = new ArrayList<>();
@@ -22,6 +28,9 @@ public class Driver1 {
         ArrayList<Lecturer> lecturers = new ArrayList<>();
         ArrayList<Enrollment> studentEnrollments = new ArrayList<>();
         ArrayList<CourseOpen> courseOpens = new ArrayList<>();
+        ArrayList<StudentPerformance> studentPerformance = new ArrayList<>();
+
+        
 
         while (scan.hasNext()) {
             String input = scan.nextLine();
@@ -59,6 +68,8 @@ public class Driver1 {
                 case "course-history": 
                     CourseHistory(courses, enrollments, courseOpens);
                     break;
+                case "find-the-best-student":
+                calculateStudentPerformance(students, studentEnrollments, courses);
             }
         }
 
@@ -276,5 +287,74 @@ public class Driver1 {
             }
         }
     }
+
+    public static void findBestStudent(String academicYear, String semester, ArrayList<StudentPerformance> studentPerformances) {
+        double bestPerformance = 0;
+        String bestStudentId = "";
+
+        for (StudentPerformance studentPerformance : studentPerformances) {
+            double performance = studentPerformance.getPerformance(academicYear + "#" + semester);
+            if (performance > bestPerformance) {
+                bestPerformance = performance;
+                bestStudentId = studentPerformance.getId();
+            }
+        }
+
+        if (!bestStudentId.equals("")) {
+            System.out.println(bestStudentId + "|" + calculateGrade(bestPerformance));
+        }
+    }
+    public static void calculateStudentPerformance(ArrayList<Student> students, ArrayList<Enrollment> enrollments, ArrayList<Course> courses) {
+        ArrayList<StudentPerformance> studentPerformances = new ArrayList<>();
     
+        // Hitung performa per semester untuk setiap mahasiswa
+        for (Student student : students) {
+            StudentPerformance studentPerformance = new StudentPerformance(student.getId());
+            for (Enrollment enrollment : enrollments) {
+                if (enrollment.getId().equals(student.getId())) {
+                    String semester = enrollment.getyear() + "#" + enrollment.getEven();
+                    double gradePoint = Student.gradepoint(enrollment.getgrade());
+                    for (Course course : courses) {
+                        if (course.getkode().equals(enrollment.getenrollcode())) {
+                            double performance = gradePoint * course.getCredits();
+                            studentPerformance.addPerformance(semester, performance);
+                            break;
+                        }
+                    }
+                }
+            }
+            studentPerformances.add(studentPerformance);
+        }
+    
+        // Temukan mahasiswa terbaik per semester
+        for (StudentPerformance studentPerformance : studentPerformances) {
+            double oddSemesterPerformance = studentPerformance.getPerformance("2020/2021#odd");
+            double evenSemesterPerformance = studentPerformance.getPerformance("2020/2021#even");
+    
+            System.out.println(studentPerformance.getId() + "|" + calculateGrade(oddSemesterPerformance) + "/" + calculateGrade(evenSemesterPerformance));
+        }
+    }
+    
+    public static String calculateGrade(double performance) {
+        // Fungsi untuk menghitung nilai berdasarkan performa
+        if (performance >= 3.5) {
+            return "A";
+        } else if (performance >= 3.0) {
+            return "B";
+        } else if (performance >= 2.5) {
+            return "C";
+        } else if (performance >= 2.0) {
+            return "D";
+        } else {
+            return "E";
+        }
+    }
+    
+
 }
+
+
+
+
+    
+
