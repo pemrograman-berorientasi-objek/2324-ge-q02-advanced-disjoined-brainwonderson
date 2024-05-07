@@ -1,50 +1,64 @@
 package academic.model;
 
-import java.util.Collection;
-
 /**
- * @author 12S22035 Brain Wonderson
+ * @author 12S22016 Desri Dabukke
  */
 
+public class Course {
+    private String kode;
+    private String studyProgram;
+    private int credits;
+    private String grade;
+    private String lecturer_initial;
 
-public class Course extends Entity {
-    private final int credit;
-    private final String passingGrade;
-
-    public Course() {
-        code = "";
-        name = "";
-        credit = 0;
-        passingGrade = "";
+    public Course(String kode, String studyProgram, int credits) {
+        this.kode = kode;
+        this.studyProgram = studyProgram;
+        this.credits = credits;
+        this.grade = "";
+        this.lecturer_initial = "";
     }
 
-    public Course(String code, String name, int credit, String passingGrade) {
-        this.code = code;
-        this.name = name;
-        this.credit = credit;
-        this.passingGrade = passingGrade;
+    public String getkode() {
+        return this.kode;
     }
 
-    public int getCredit() {
-        return credit;
-    }
-    public String getPassingGrade() {
-        return passingGrade;
+    public void setkode(String kode) {
+        this.kode = kode;
     }
 
-    public Course similar(String sought, Collection<Course> list) {
-        for (Course elem: list) {
-            if (elem.getCode().equals(sought))
-                return elem;
-        }
+    public String getStudyProgram() {
+        return this.studyProgram;
+    }
+
+    public int getCredits() {
+        return this.credits;
+    }
+
+    public String getGrade() {
+        return this.grade;
+    }
+
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getLecturer() {
+        return this.lecturer_initial;
+    }
+
+    public void setLecturer(String lecturer) {
+        this.lecturer_initial = lecturer;
+    }
+
+    
+    public String getEmail() {
         return null;
-    }
-
+    }  
 
     @Override
     public String toString() {
-        return String.format("%s|%d|%s", super.toString(),
-                                                credit,
-                                                passingGrade);
+        return this.kode + "|" + this.studyProgram + "|" + this.credits + "|" + this.grade /*+ "|" + this.lecturer_initial*/;
     }
 }

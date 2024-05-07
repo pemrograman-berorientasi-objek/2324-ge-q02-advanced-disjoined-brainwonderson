@@ -1,87 +1,86 @@
 package academic.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 /**
- * @author 12S22035 Brain Wonderson
+ * @author 12S22016 Desri Dabukke
  */
 
+public class Student extends Humans{
+    // private String id;
+    // private String name;
+    private String academicyear;
+    private String studyprogram;
+    private double gpa;
+    private int totalCredits;
 
-public class Student extends Entity {
-    private final String year;
-    private final String studyProgram;
-    protected Collection <GradeList> grade_list;
-
-    public Student() {
-        code = "";
-        name = "";
-        year = "";
-        studyProgram = "";
-        grade_list = new HashSet<>();
+    public Student(String _id, String _name, String _academicyear, String studyprogram, String department) {
+        super(_id, _name);
+        this.academicyear = _academicyear;
+        this.studyprogram = studyprogram;
+        this.gpa = 0;
+        this.totalCredits = 0;
     }
 
-    public Student(String code, String name, String year, String studyProgram) {
-        this.code = code;
-        this.name = name;
-        this.year = year;
-        this.studyProgram = studyProgram;
-        grade_list = new HashSet<>();
+    public String getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getacademicyear() {
+        return this.academicyear;
+    }
+
+    public String getStudyProgram() {
+        return this.studyprogram;
     }
 
     public String getYear() {
-        return year;
-    }
-    public String getStudyProgram() {
-        return studyProgram;
-    }
-
-    public Student similar(String sought, Collection<Student> list) {
-        for (Student elem: list) {
-            if (elem.getCode().equals(sought))
-                return elem;
-        }
         return null;
     }
 
-    public GradeList put_grade(GradeList newObj) {
-        boolean noSimilar = true;
-        for (GradeList elem: grade_list) {
-            if (elem.getCode().equals(newObj.getCode()))
-                noSimilar = false; break;
-        }
-        if (noSimilar && grade_list.add(newObj)) {
-//            System.out.printf(""); /* jika tidak print sesuatu, total credit jadi 11 bukan 7 */
-            return newObj;
-            }
-        return null;
+    public double getGpa() {
+        return this.gpa;
     }
 
-    public Collection <GradeList> getGrade_list() {
-        return grade_list;
+    public int getTotalCredits(){
+        if (this.gpa == 0.0) {
+            return 0;
+        } else{
+        return totalCredits;
+        }
     }
 
-    public String details() {
-        double gpa = 0;
-        int totalCredit = 0;
-        for (GradeList elem: grade_list) {
-            totalCredit += elem.getCredit();
-            gpa += ( elem.getGrade()*elem.getCredit() );
-        }
-        gpa = (gpa==0 && totalCredit==0)? 0.00 : gpa/totalCredit;
-        totalCredit = (gpa==0)? 0 : totalCredit;
-        return String.format("%s|%s|%s|%s|%.2f|%d", code,
-                                                    name,
-                                                    year,
-                                                    studyProgram,
-                                                    gpa,
-                                                    totalCredit);
+    public void setTotalCredits(int _totalCredits){
+        this.totalCredits = _totalCredits; 
     }
+
+    // buat public gradepoint a, ab, b, bc, c, d, e = 4, 3.5, 3, 2.5, 2, 1, 0
+    public static double gradepoint(String grade){
+        if (grade.equals("A")) {
+            return 4.0;
+        } else if (grade.equals("AB")) {
+            return 3.5;
+        } else if (grade.equals("B")) {
+            return 3.0;
+        } else if (grade.equals("BC")) {
+            return 2.5;
+        } else if (grade.equals("C")) {
+            return 2.0;
+        } else if (grade.equals("D")) {
+            return 1.0;
+        } else if (grade.equals("E")) {
+            return 0.0;
+        } else {
+            return 0.0;
+        }
+    }
+
+
 
     @Override
     public String toString() {
-        return String.format("%s|%s|%s", super.toString(),
-                                                year,
-                                                studyProgram);
+        return this.id + "|" + this.name + "|" + this.academicyear + "|" + this.studyprogram;
     }
 }

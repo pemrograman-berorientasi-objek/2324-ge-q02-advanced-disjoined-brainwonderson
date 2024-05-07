@@ -1,92 +1,93 @@
 package academic.model;
+
 /**
- * @author 12S22035 Brain Wonderson
+ * @author 12S22016 Desri Dabukke
  */
 
-import java.util.Collection;
+public class Enrollment {
+    private String enrollcode;
+    private String id;
+    private String year;
+    private String semester;
+    private String grade;
+    private String returngrade;
+    private String remedial;
+    private int totalremedial;
 
-public class Enrollment<T extends Course, S extends Student> {
-    private final T course;
-    private final S student;
-    private final String academicYear;
-    private Semester semester = Semester.N_A;
-    private Grade grade;
-    private String exGrade;
-
-    public Enrollment() {
-        this.course = null;
-        this.student = null;
-        this.academicYear = "";
-        this.grade = Grade.N_A;
-        this.exGrade = "None";
+    public Enrollment(String enroll_code, String _nim, String _year, String _even) {
+        this.enrollcode = enroll_code;
+        this.id = _nim;
+        this.year = _year;
+        this.semester = _even ;
+        this.grade = "None";
+        this.returngrade = "";
+        this.remedial = null;
+        this.totalremedial = 0;
+ 
+    }
+    
+    public String getenrollcode() {
+        return this.enrollcode;
     }
 
-    public Enrollment(T course, S student, String academicYear, String semester) {
-        this.course = course;
-        this.student = student;
-        this.academicYear = academicYear;
-        this.semester = this.semester.findSemester(semester);
-        this.grade = Grade.N_A;
-        this.exGrade = "None";
+    public String getId() {
+        return this.id;
     }
 
-    public T getCourse() {
-        return course;
+    public String getyear() {
+        return this.year;
     }
 
-    public S getStudent() {
-        return student;
+    public String getEven() {
+        return this.semester;
     }
 
-    public String getAcademicYear() {
-        return academicYear;
+    public String getgrade() {
+        return this.grade;
     }
 
-    public String getSemester() {
-        return semester.getWord();
+    public String getreturngrade() {
+        return this.returngrade;
     }
 
-    public Grade getGrade() {
-        return grade;
+    public String getRemedial() {
+        return this.remedial;
     }
 
-    public void setGrade(Grade grade) {
-        this.grade = grade;
+    public int getTotalRemedi() {
+        return this.totalremedial;
     }
 
-    public String getExGrade() {
-        return exGrade;
+    public void setTotalRemedi() {
+        this.totalremedial += 1;
+    }
+    
+    public void setgrade(String _grade) {
+        this.grade = _grade;
     }
 
-    public void setExGrade(String exGrade) {
-        this.exGrade = exGrade;
+    public void setreturngrade(String _returngrade) {
+        this.returngrade = _returngrade;
+    }
+    public void setRemedial(String _remedial) {
+        this.remedial = _remedial;
     }
 
-    public Enrollment<T, S> similar(String sought_code, String sought_id, String sought_year, String sought_semester, Collection<Enrollment<T, S>> list) {
-        for (Enrollment<T, S> elem : list) {
-            if (
-                    elem.getCourse().getCode().equals(sought_code) &&
-                            elem.getStudent().getCode().equals(sought_id) &&
-                            elem.getAcademicYear().equals(sought_year) &&
-                            elem.getSemester().equals(sought_semester)
-            ) return elem;
-        }
-        return null;
+    public void exchangegrade() {
+        String temp = "";
+        temp = this.grade;
+        this.grade = this.returngrade;
+        this.returngrade = temp;
+        
     }
+    
 
     @Override
     public String toString() {
-        if (exGrade.equals("None"))
-            return String.format("%s|%s|%s|%s|%s", course.getCode(),
-                    student.getCode(),
-                    academicYear,
-                    semester.getWord(),
-                    grade.getLetter());
-        return String.format("%s|%s|%s|%s|%s(%s)", course.getCode(),
-                student.getCode(),
-                academicYear,
-                semester.getWord(),
-                grade.getLetter(),
-                exGrade);
+        return this.enrollcode + "|" + this.id + "|" + this.year + "|" + this.semester + "|" + this.grade;
     }
+
+    public String toremedial() {
+            return this.enrollcode + "|" + this.id + "|" + this.year + "|" + this.semester + "|" + this.grade + "(" +this.returngrade+")";
+        }
 }

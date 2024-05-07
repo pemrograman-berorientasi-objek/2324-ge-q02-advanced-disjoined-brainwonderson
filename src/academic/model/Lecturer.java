@@ -1,45 +1,54 @@
 package academic.model;
 
 /**
- * @author 12S22035 Brain Wonderson
+ * @author 12S22016 Desri Dabukke
  */
-
-public class Lecturer extends Entity {
-    private final String email;
-    private final String initial;
-    private final String studyProgram;
-
-    public Lecturer() {
-        code = "";
-        name = "";
-        email = "";
-        initial = "";
-        studyProgram = "";
+ 
+public class Lecturer extends Humans{ 
+    // private String id;
+    // private String name;
+    private String inisial;
+    private String email;
+    private String studyProgram;
+    
+    public Lecturer(String _id, String _name, String inisial, String _email, String _studyProgram) {
+        super(_id, _name);
+        this.inisial = inisial;
+        this.email = _email;
+        this.studyProgram = _studyProgram;
+    }
+ 
+    public String getId() {
+        return this.id;
     }
 
-    public Lecturer(String code, String name, String initial, String email, String studyProgram) {
-        this.code = code;
-        this.name = name;
-        this.email = email;
-        this.initial = initial;
-        this.studyProgram = studyProgram;
+    public String getName() {
+        return this.name;
+    }
+    
+    public String getInisial() {
+        return this.inisial;
+    }
+
+    public void setInisial(String _inisial) {
+        this.inisial = _inisial;
+    }
+
+
+    public String getEmail() {
+        return this.email;
     }
 
     public String getStudyProgram() {
-        return studyProgram;
+        return this.studyProgram;
     }
-    public String getEmail() {
-        return email;
-    }
-    public String getInitial() {
-        return initial;
+
+    public void setStudyProgram(String _studyProgram) {
+        this.studyProgram = _studyProgram;
     }
 
     @Override
     public String toString() {
-        return String.format("%s|%s|%s|%s", super.toString(),
-                                            initial,
-                                            email,
-                                            studyProgram);
+        return this.id + "|" + this.name + "|" + this.inisial + "|" + this.email + "|" + this.studyProgram;
     }
 }
