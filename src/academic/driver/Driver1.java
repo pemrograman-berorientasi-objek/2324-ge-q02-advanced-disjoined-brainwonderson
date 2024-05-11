@@ -68,8 +68,12 @@ public class Driver1 {
                 case "course-history": 
                     CourseHistory(courses, enrollments, courseOpens);
                     break;
-                case "find-the-best-student":
-                calculateStudentPerformance(students, studentEnrollments, courses);
+                    case "find-the-best-student":
+                    String academicyear = part[1];
+                    String semester = part[2];
+                    bestStudent(students, enrollments, courses, academicyear, semester);
+                    break;
+                
             }
         }
 
@@ -287,68 +291,68 @@ public class Driver1 {
             }
         }
     }
-
-    public static void findBestStudent(String academicYear, String semester, ArrayList<StudentPerformance> studentPerformances) {
-        double bestPerformance = 0;
-        String bestStudentId = "";
-
-        for (StudentPerformance studentPerformance : studentPerformances) {
-            double performance = studentPerformance.getPerformance(academicYear + "#" + semester);
-            if (performance > bestPerformance) {
-                bestPerformance = performance;
-                bestStudentId = studentPerformance.getId();
-            }
-        }
-
-        if (!bestStudentId.equals("")) {
-            System.out.println(bestStudentId + "|" + calculateGrade(bestPerformance));
-        }
+    public static boolean isEven(String id) {
+        // Extract the numerical part of the student ID and check if it's even
+        int numericalPart = Integer.parseInt(id.substring(3));
+        return numericalPart % 2 == 0;
     }
-    public static void calculateStudentPerformance(ArrayList<Student> students, ArrayList<Enrollment> enrollments, ArrayList<Course> courses) {
-        ArrayList<StudentPerformance> studentPerformances = new ArrayList<>();
     
-        // Hitung performa per semester untuk setiap mahasiswa
+    //create a best student function using even numbers
+    public static void bestStudent(ArrayList<Student> students, ArrayList<Enrollment> enrollments, ArrayList<Course> courses, String academicyear, String semester) {
+        String bestStudent = "";
+        String bestGradeEven = "";
+        String bestGradeOdd = "";
         for (Student student : students) {
-            StudentPerformance studentPerformance = new StudentPerformance(student.getId());
-            for (Enrollment enrollment : enrollments) {
-                if (enrollment.getId().equals(student.getId())) {
-                    String semester = enrollment.getyear() + "#" + enrollment.getEven();
-                    double gradePoint = Student.gradepoint(enrollment.getgrade());
-                    for (Course course : courses) {
-                        if (course.getkode().equals(enrollment.getenrollcode())) {
-                            double performance = gradePoint * course.getCredits();
-                            studentPerformance.addPerformance(semester, performance);
-                            break;
+            // Check if the student ID is even
+            if (isEven(student.getId())) {
+                double totalGpaEven = 0;
+                double totalGpaOdd = 0;
+                int totalCreditsEven = 0;
+                int totalCreditsOdd = 0;
+                String studentBestGradeEven = "";
+                String studentBestGradeOdd = "";
+                for (Enrollment enrollment : enrollments) {
+                    // Filter enrollments by academic year, semester, and student ID
+                    if (enrollment.getId().equals(student.getId()) && enrollment.getyear().equals(academicyear)) {
+                        for (Course course : courses) {
+                            if (course.getkode().equals(enrollment.getenrollcode())) {
+                                double gradePoint = Student.gradepoint(enrollment.getgrade()) * course.getCredits();
+                                if (enrollment.getEven().equals("even")) {
+                                    totalGpaEven += gradePoint;
+                                    totalCreditsEven += course.getCredits();
+                                    if (gradePoint > 0 && gradePoint >= Student.gradepoint(studentBestGradeEven)) {
+                                        studentBestGradeEven = enrollment.getgrade();
+                                    }
+                                } else {
+                                    totalGpaOdd += gradePoint;
+                                    totalCreditsOdd += course.getCredits();
+                                    if (gradePoint > 0 && gradePoint >= Student.gradepoint(studentBestGradeOdd)) {
+                                        studentBestGradeOdd = enrollment.getgrade();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+                // Compare the best grades for this student with the overall best grades
+                if (Student.gradepoint(studentBestGradeEven) > Student.gradepoint(bestGradeEven)) {
+                    bestGradeEven = studentBestGradeEven;
+                    bestStudent = student.getId(); // Update bestStudent for even semester
+                }
+                if (Student.gradepoint(studentBestGradeOdd) > Student.gradepoint(bestGradeOdd)) {
+                    bestGradeOdd = studentBestGradeOdd;
+                    bestStudent = student.getId(); // Update bestStudent for odd semester
+                }
             }
-            studentPerformances.add(studentPerformance);
         }
-    
-        // Temukan mahasiswa terbaik per semester
-        for (StudentPerformance studentPerformance : studentPerformances) {
-            double oddSemesterPerformance = studentPerformance.getPerformance("2020/2021#odd");
-            double evenSemesterPerformance = studentPerformance.getPerformance("2020/2021#even");
-    
-            System.out.println(studentPerformance.getId() + "|" + calculateGrade(oddSemesterPerformance) + "/" + calculateGrade(evenSemesterPerformance));
+        // Output the best student and their best grades for odd and even semesters
+        if (!bestStudent.isEmpty() && !bestGradeEven.isEmpty() && !bestGradeOdd.isEmpty()) {
+            System.out.println(bestStudent + "|" + bestGradeOdd + "/" + bestGradeEven);
         }
     }
     
-    public static String calculateGrade(double performance) {
-        // Fungsi untuk menghitung nilai berdasarkan performa
-        if (performance >= 3.5) {
-            return "A";
-        } else if (performance >= 3.0) {
-            return "B";
-        } else if (performance >= 2.5) {
-            return "C";
-        } else if (performance >= 2.0) {
-            return "D";
-        } else {
-            return "E";
-        }
-    }
+    
+    
     
 
 }

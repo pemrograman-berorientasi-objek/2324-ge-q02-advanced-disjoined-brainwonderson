@@ -90,4 +90,9 @@ public class Enrollment {
     public String toremedial() {
             return this.enrollcode + "|" + this.id + "|" + this.year + "|" + this.semester + "|" + this.grade + "(" +this.returngrade+")";
         }
+
+    public Object getEven2() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getEven2'");
+    }
 }

@@ -83,4 +83,14 @@ public class Student extends Humans{
     public String toString() {
         return this.id + "|" + this.name + "|" + this.academicyear + "|" + this.studyprogram;
     }
+
+    public static String gradeFromGPA(double gpa2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'gradeFromGPA'");
+    }
+
+    public void setGpa(double gpa2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setGpa'");
+    }
 }

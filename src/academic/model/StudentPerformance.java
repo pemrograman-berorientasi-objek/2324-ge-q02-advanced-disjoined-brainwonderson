@@ -22,4 +22,14 @@ public class StudentPerformance {
     public double getPerformance(String semester) {
         return performanceMap.getOrDefault(semester, 0.0); // Mengembalikan nilai default 0.0 jika tidak ada nilai untuk semester tersebut
     }
+
+    public static String grade(double gpa) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'grade'");
+    }
+
+    public Map<String, StudentPerformance> getPerformanceMap() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPerformanceMap'");
+    }
 }
