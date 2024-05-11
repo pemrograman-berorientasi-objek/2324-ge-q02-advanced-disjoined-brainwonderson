@@ -19,27 +19,25 @@ public class Driver1 {
 
     private static Course[] courses;
     public static void main(String[] args) {
-         // Method untuk menjalankan program utama
-         courses = new Course[100];
+        courses = new Course[100];
         Scanner scan = new Scanner(System.in);
         ArrayList<Student> students = new ArrayList<>();
-        ArrayList<Course> courses = new ArrayList<>();
+        ArrayList<Course> coursesList = new ArrayList<>();
         ArrayList<Enrollment> enrollments = new ArrayList<>();
         ArrayList<Lecturer> lecturers = new ArrayList<>();
         ArrayList<Enrollment> studentEnrollments = new ArrayList<>();
         ArrayList<CourseOpen> courseOpens = new ArrayList<>();
         ArrayList<StudentPerformance> studentPerformance = new ArrayList<>();
-
-        
-
+        ArrayList<String[]> bestStudentRequests = new ArrayList<>(); // Store "find-the-best-student" requests
+    
         while (scan.hasNext()) {
             String input = scan.nextLine();
             if (input.equals("---")) {
                 break;
             }
-
+    
             String[] part = input.split("#");
-
+    
             switch (part[0]) {
                 case "student-add": 
                     StudentAdd(part[1], part[2], part[3], part[4], students);
@@ -57,38 +55,37 @@ public class Driver1 {
                     LecturerAdd(part[1], part[2], part[3], part[4], part[5], lecturers);
                     break;
                 case "course-add": 
-                    CourseAdd(part[1], part[2], Integer.parseInt(part[3]), part[4], courses);
+                    CourseAdd(part[1], part[2], Integer.parseInt(part[3]), part[4], coursesList);
                     break;
                 case "student-details": 
-                    StudentDetails(part[1], courses, enrollments, students);
+                    StudentDetails(part[1], coursesList, enrollments, students);
                     break;
                 case "course-open": 
-                    CourseOpen(part[1], part[2], part[3], part[4], courses, lecturers, courseOpens);
+                    CourseOpen(part[1], part[2], part[3], part[4], coursesList, lecturers, courseOpens);
                     break;
                 case "course-history": 
-                    CourseHistory(courses, enrollments, courseOpens);
+                    CourseHistory(coursesList, enrollments, courseOpens);
                     break;
-                    case "find-the-best-student":
-                    String academicyear = part[1];
-                    String semester = part[2];
-                    bestStudent(students, enrollments, courses, academicyear, semester);
+                case "find-the-best-student":
+                    // Store "find-the-best-student" request for later processing
+                    bestStudentRequests.add(new String[]{part[1], part[2]});
                     break;
-                
             }
         }
-
+    
+        // Output the data
         for (Lecturer lecturer : lecturers) {
             System.out.println(lecturer.toString());
         }
-
-        for (Course course : courses) {
+    
+        for (Course course : coursesList) {
             System.out.println(course.toString());
         }
-
+    
         for (Student student : students) {
             System.out.println(student.toString());
         }
-
+    
         for (Enrollment enrollment : studentEnrollments) {
             if (!enrollment.getreturngrade().equals("")) {
                 System.out.println(enrollment.toremedial());
@@ -96,9 +93,17 @@ public class Driver1 {
                 System.out.println(enrollment.toString());
             }
         }
-
+    
+        // Process best student requests after main loop ends
+        for (String[] request : bestStudentRequests) {
+            bestStudent(students, enrollments, coursesList, request[0], request[1]);
+        }
+    
         scan.close();
     }
+    
+
+    
 
     public static void StudentAdd(String code, String name, String academicyear, String program, ArrayList<Student> students) {
         // Method untuk menambahkan data mahasiswa
